@@ -5,7 +5,6 @@ import time
 import io
 from datetime import datetime
 from dotenv import load_dotenv
-from audiorecorder import audiorecorder
 
 load_dotenv()
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
@@ -282,33 +281,13 @@ if st.session_state.page == "message":
 
     st.markdown("### Leave me a message 💌")
 
-    option = st.radio(
-        "Choose how you would like to leave your message:",
-        ["Write a message", "Send a voice note"]
-    )
-
-    message = ""
-    audio = None
-
-    if option == "Write a message":
-        message = st.text_area("Your message")
-
-    elif option == "Send a voice note":
-
-        st.markdown("### Record your voice note 🎤")
-
-        audio = audiorecorder("Click to record", "Recording...")
-
-        if audio and len(audio) > 0:
-            audio_bytes = io.BytesIO()
-            audio.export(audio_bytes, format="wav")
-            st.audio(audio_bytes.getvalue(), format="audio/wav")
+    message = st.text_area("Your message")
 
     if st.button("Send Message"):
 
-        if option == "Write a message" and message.strip():
+        if message.strip():
 
-            with open("responses.csv","a",encoding="utf-8") as f:
+            with open("responses.csv", "a", encoding="utf-8") as f:
                 f.write(f"{st.session_state.current_name},{message}\n")
 
             st.success("Your message has been sent successfully 💕")
@@ -317,23 +296,8 @@ if st.session_state.page == "message":
             st.session_state.page = "thankyou"
             st.rerun()
 
-        elif option == "Send a voice note" and audio and len(audio) > 0:
-
-            os.makedirs("voice_notes", exist_ok=True)
-
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"voice_notes/{st.session_state.current_name}_{timestamp}.wav"
-
-            audio.export(filename, format="wav")
-
-            st.success("Your voice note has been sent successfully 💕")
-            time.sleep(2)
-
-            st.session_state.page = "thankyou"
-            st.rerun()
-
         else:
-            st.error("Please write a message or record a voice note before sending.")
+            st.error("Please write a message before sending.")
 
 # --------------------------
 # THANK YOU PAGE
