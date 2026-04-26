@@ -7,7 +7,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+ADMIN_PASSWORD = st.secrets["ADMIN_PASSWORD"]
 
 st.set_page_config(page_title="Bridesmaid Proposal", page_icon="💍", layout="centered")
 
@@ -34,79 +34,82 @@ audio = None
 # --------------------------
 
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 
 [data-testid="stAppViewContainer"]{
-background-color:#ffe4ec;
+    background-color:#ffe4ec;
 }
 
+/* FORCE ALL GENERAL TEXT TO BLACK */
+html, body, [class*="css"]  {
+    color: #000000 !important;
+    font-family:'Poppins', sans-serif;
+}
+
+/* MAIN HEADERS STAY PINK */
 .title{
-font-family:'Great Vibes', cursive;
-text-align:center;
-font-size:64px;
-color:#d63384;
+    font-family:'Great Vibes', cursive;
+    text-align:center;
+    font-size:64px;
+    color:#d63384 !important;
 }
 
 .subtitle{
-font-family:'Playfair Display', serif;
-text-align:center;
-font-size:28px;
-color:#444;
+    font-family:'Playfair Display', serif;
+    text-align:center;
+    font-size:28px;
+    color:#d63384 !important;
 }
 
+/* NORMAL MESSAGE TEXT */
 .message{
-text-align:center;
-font-size:20px;
+    text-align:center;
+    font-size:20px;
+    color:#000000 !important;
+    font-family:'Poppins', sans-serif;
 }
 
-input{
-border-radius:12px !important;
-border:2px solid #f4a7c5 !important;
-padding:10px !important;
+/* INPUT LABELS */
+label, .stTextInput label, .stTextArea label{
+    color:#000000 !important;
+    font-weight:500;
 }
 
+/* INPUT BOXES */
+input, textarea{
+    border-radius:12px !important;
+    border:2px solid #f4a7c5 !important;
+    padding:10px !important;
+    color:#000000 !important;
+    background-color:#fff8fb !important;
+}
+
+/* BUTTONS */
 button{
-height:60px;
-font-size:20px !important;
-border-radius:14px !important;
+    height:60px;
+    font-size:20px !important;
+    border-radius:14px !important;
+}
+
+/* STREAMLIT GENERATED TEXT */
+p, span, div, h1, h2, h3, h4, h5, h6 {
+    color:#000000 !important;
+}
+
+/* SUCCESS INFO WARNING TEXT */
+.stSuccess, .stInfo, .stWarning, .stError{
+    color:#000000 !important;
+}
+
+/* ADMIN HEADINGS */
+h3, h4 {
+    color:#d63384 !important;
 }
 
 </style>
 """, unsafe_allow_html=True)
-
-# --------------------------
-# FLOATING HEARTS
-# --------------------------
-
-components.html("""
-<style>
-.heart{
-position:fixed;
-bottom:-10px;
-font-size:20px;
-animation:float 6s linear infinite;
-color:#ff69b4;
-}
-
-@keyframes float{
-0%{transform:translateY(0);}
-100%{transform:translateY(-100vh);}
-}
-</style>
-
-<script>
-for(let i=0;i<20;i++){
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="💗";
-heart.style.left=Math.random()*100+"%";
-heart.style.animationDuration=(4+Math.random()*5)+"s";
-document.body.appendChild(heart);
-}
-</script>
-""", height=0)
 
 # --------------------------
 # INVITATION PAGE
@@ -159,7 +162,10 @@ friends = {
     "Apako":{"role":"Bridesmaid","allow_no":False},
     "Rofiat":{"role":"Bridesmaid","allow_no":False},
     "Praise":{"role":"Bridesmaid","allow_no":True},
-    "Fathias":{"role":"Bridesmaid","allow_no":True}
+    "Fathias":{"role":"Bridesmaid","allow_no":True},
+    "Lero":{"role":"Bridesmaid","allow_no":True},
+    "Darla":{"role":"Bridesmaid","allow_no":True},
+    "Ruyina":{"role":"Bridesmaid","allow_no":True}
 }
 
 # --------------------------
